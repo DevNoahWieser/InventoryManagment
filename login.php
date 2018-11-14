@@ -77,7 +77,7 @@
 				<ul class="main-nav nav navbar-nav navbar-right">
 				<li><a href="login.php">Login</a></li>
 				    <li><a href="index.php#home">Home</a></li>
-					<li><a href="inventory.php">Inventory</a></li>
+					<!--<li><a href="inventory.php">Inventory</a></li>-->
 					<li class="has-dropdown"><a href="#">Other</a>
         				<ul class="dropdown">
         					<li><a href="none.php">Misc</a></li>
@@ -147,12 +147,6 @@
 			<div class="row">
 
 				<div class="col-md-12">
-
-					<!-- footer logo -->
-					<div class="footer-logo">
-						<img src="./img/logo.png" alt="logo"></a>
-					</div>
-					<!-- /footer logo -->
 
 					<!-- footer copyright -->
 					<div class="footer-copyright">

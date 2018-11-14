@@ -38,13 +38,6 @@
 	    if(!isset($_SESSION['username'])){
 	        header("Location: ../login");
 	    }
-	
-		// Collect Form Information
-		$clearance = htmlspecialchars($_POST['clearance']);
-		$user = htmlspecialchars($_POST['username']);
-		$pass1 = htmlspecialchars($_POST['password']);
-		$pass2 = htmlspecialchars($_POST['password-confirm']);
-		$failed_form = false;
 	?>
 	<!-- Header -->
 	<header id="home">
@@ -76,7 +69,7 @@
 					<!-- /Collapse nav button -->
 				</div>
 
-				<!--  Main navigation  -->
+                <!--  Main navigation  -->
 				<?php
                     if(isset($_SESSION['username']) && $_SESSION['clearance'] == "admin"){
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
@@ -106,90 +99,13 @@
     				}
 					?>
 				<!-- /Main navigation -->
+				
 			</div>
 		</nav>
 		<!-- /Nav -->
 
-		<!-- home wrapper -->
-		<div class="home-wrapper">
-			<div class="container">
-				<div class="row">
-
-					<!-- home content -->
-					<div class="col-md-10 col-md-offset-1">
-						<div class="home-content">
-							<?php
-								$stmt = $conn->query("SELECT username FROM employees WHERE username='".strtolower($user)."'");
-								if($user=="" && $pass1=="" && $pass2==""){
-								    echo(
-									'<h1 class="white-text">Register Employee</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
-									</p>'
-									);
-									$failed_form= true;
-								}
-								else if($user=="" || $pass1=="" || $pass2==""){
-								    echo(
-									'<h1 class="white-text">Missing Field - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
-									</p>'
-									);
-									$failed_form= true;
-								}
-								else if($stmt->num_rows > 0){
-									echo(
-									'<h1 class="white-text">Username Already Used - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
-									</p>'
-									);
-									$failed_form= true;
-								}
-								else if($pass1 != $pass2){
-									echo(
-									'<h1 class="white-text">Passwords Don\'t Match - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
-									</p>'
-									);
-									$failed_form = true;
-								}
-								else{
-									echo(
-									'<h1 class="white-text">Welcome, '.$user.'</h1>
-									<a href="../index.php#home"><button>Return to Home</button></a>'
-									);
-								}
-							?>
-						</div>
-					</div>
-					<!-- /home content -->
-
-				</div>
-			</div>
-		</div>
-		<!-- /home wrapper -->
-
 	</header>
 	<!-- /Header -->
-	
-	<?php
-		if(!$failed_form){
-			echo(
-			'<style>
-				#section1 {
-					display: none;
-				}
-			</style>'
-			);
-			$sql = "INSERT INTO employees (clearance,username,password)
-					VALUES ('$clearance','$user','$pass1')";
-					
-			if($conn->query($sql) === true){
-				echo 'You have been Registered!';
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-		}
-	?>
 	
 	<!-- SECTION 1 -->
 	<div id="section1" class="section md-padding">
@@ -201,32 +117,9 @@
 			<div class="row">
 
 			    <!-- Section 1 -->
-			    <div id="register-form" class="col-md-5">
-				    <form class="form-register" method="post" action="new-register.php">
-				        <label>Clearance</label>
-					    <div class="form__group">
-						    <input type="radio" name="clearance" value="employee">Employee<br/>
-						    <input type="radio" name="clearance" value="admin">Manager/Admin
-					    </div>
-						
-						<br/>
-						<label>Login Information</label>
-					    <div class="form__group">
-						    <input type="text" placeholder="Username" class="form__input" name="username"/>
-					    </div>
-						
-			    		<div class="form__group">
-				    		<input type="password" placeholder="Password" class="form__input" name="password"/>
-					    </div>
-						
-				    	<div class="form__group">
-					    	<input type="password" placeholder="Confirm Password" class="form__input" name="password-confirm"/>
-					    </div>
-						
-					    <input class="btn" type="submit" value ="Register"></input>
-						
-			    	</form>
-			    </div>
+			    <p>Test</p>
+			    <p>Test</p>
+			    <p>Test</p>
 				<!-- /Section 1 -->
 
 		</div>

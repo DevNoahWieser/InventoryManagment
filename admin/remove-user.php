@@ -14,26 +14,30 @@
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CVarela+Round" rel="stylesheet">
 
 	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+	<link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css" />
 
 	<!-- Owl Carousel -->
-	<link type="text/css" rel="stylesheet" href="css/owl.carousel.css" />
-	<link type="text/css" rel="stylesheet" href="css/owl.theme.default.css" />
+	<link type="text/css" rel="stylesheet" href="../css/owl.carousel.css" />
+	<link type="text/css" rel="stylesheet" href="../css/owl.theme.default.css" />
 
 	<!-- Magnific Popup -->
-	<link type="text/css" rel="stylesheet" href="css/magnific-popup.css" />
+	<link type="text/css" rel="stylesheet" href="../css/magnific-popup.css" />
 
 	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="../css/font-awesome.min.css">
 
 	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="css/style.css" />
+	<link type="text/css" rel="stylesheet" href="../css/style.css" />
 </head>
 
 <body>
 	<?php
-	    include("required_items/config.php");
+	    include("../required_items/config.php");
 	    session_start();
+	    
+	    if(!isset($_SESSION['username'])){
+	        header("Location: ../login");
+	    }
 	
 		// Collect Form Information
 		$clearance = htmlspecialchars($_POST['clearance']);
@@ -46,7 +50,7 @@
 	<header id="home">
 	
 		<!-- Background Image -->
-		<div class="bg-img" style="background-image: url('img/background1.jpg');">
+		<div class="bg-img" style="background-image: url('../img/background1.jpg');">
 			<div class="overlay"></div>
 		</div>
 		<!-- /Background Image -->
@@ -59,8 +63,8 @@
 					<!-- Logo -->
 					<div class="navbar-brand">
 						<a href="index.php">
-							<img class="logo" src="img/logo.png" alt="logo">
-							<img class="logo-alt" src="img/logo-alt.png" alt="logo">
+							<img class="logo" src="../img/logo.png" alt="logo">
+							<img class="logo-alt" src="../img/logo-alt.png" alt="logo">
 						</a>
 					</div>
 					<!-- /Logo -->
@@ -76,38 +80,28 @@
 				<?php
                     if(isset($_SESSION['username']) && $_SESSION['clearance'] == "admin"){
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
-                    				<li><a href="logout.php" style="color: darkgrey;">Logout</a></li>
-                    				<li><a href="#">Admin CPanel</a></li>
-                    				<li><a href="index.php#home">Home</a></li>
-                    				<li><a href="inventory.php">Inventory</a></li>
-                    				<li class="has-dropdown"><a href="#">Other</a>
+                    				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
+                    				<li><a href="../index#home">Home</a></li>
+                    				<li><a href="../inventory">Inventory</a></li>
+                    				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
-                            				<li><a href="#">Misc</a></li>
+                            				<li><a href="new-register">Add User</a></li>
+                            				<li><a href="remove-user">Remove User</a></li>
                             			</ul>
                     			    </li>
                 		    	</ul>';
     				}
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
-                				    <li><a href="logout.php" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="index.php#home">Home</a></li>
-                					<li><a href="inventory.php">Inventory</a></li>
-                					<li class="has-dropdown"><a href="#">Other</a>
-                        				<ul class="dropdown">
-                        					<li><a href="none.php">Misc</a></li>
-                        				</ul>
-                				    </li>
+                				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
+                				    <li><a href="../index#home">Home</a></li>
+                					<li><a href="../inventory">Inventory</a></li>
                 				</ul>';
     				}
     				else{
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
-                				    <li><a href="login.php">Login</a></li>
-                				    <li><a href="index.php#home">Home</a></li>
-                					<li class="has-dropdown"><a href="#">Other</a>
-                        				<ul class="dropdown">
-                        					<li><a href="none.php">Misc</a></li>
-                        				</ul>
-                				    </li>
+                				    <li><a href="../login">Login</a></li>
+                				    <li><a href="../index#home">Home</a></li>
                 				</ul>';
     				}
 					?>
@@ -161,7 +155,7 @@
 								else{
 									echo(
 									'<h1 class="white-text">Welcome, '.$user.'</h1>
-									<a href="index.php#home"><button>Return to Home</button></a>'
+									<a href="../index.php#home"><button>Return to Home</button></a>'
 									);
 								}
 							?>
@@ -257,7 +251,7 @@
 
 					<!-- footer logo -->
 					<div class="footer-logo">
-						<a href="index.php"><img src="img/logo-alt.png" alt="logo"></a>
+						<a href="../index.php"><img src="../img/logo-alt.png" alt="logo"></a>
 					</div>
 					<!-- /footer logo -->
 
@@ -294,11 +288,11 @@
 	<!-- /Preloader -->
 
 	<!-- jQuery Plugins -->
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
-	<script type="text/javascript" src="js/jquery.magnific-popup.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/owl.carousel.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.magnific-popup.js"></script>
+	<script type="text/javascript" src="../js/main.js"></script>
 
 </body>
 

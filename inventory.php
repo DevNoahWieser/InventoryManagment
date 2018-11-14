@@ -44,6 +44,10 @@
 	<?php
 		include("required_items/config.php");
 	    session_start();
+	    
+	    if(!isset($_SESSION['username'])){
+	        header("Location: login");
+	    }
 	?>
 	<!-- Header -->
 	<header id="home">
@@ -79,38 +83,28 @@
 				<?php
                     if(isset($_SESSION['username']) && $_SESSION['clearance'] == "admin"){
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
-                    				<li><a href="logout.php" style="color: darkgrey;">Logout</a></li>
-                    				<li><a href="#">Admin CPanel</a></li>
-                    				<li><a href="index.php#home">Home</a></li>
-                    				<li><a href="inventory.php">Inventory</a></li>
-                    				<li class="has-dropdown"><a href="#">Other</a>
+                    				<li><a href="logout" style="color: darkgrey;">Logout</a></li>
+                    				<li><a href="index#home">Home</a></li>
+                    				<li><a href="inventory">Inventory</a></li>
+                    				<li class="has-dropdown"><a href="admin/cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
-                            				<li><a href="#">Misc</a></li>
+                            				<li><a href="admin/new-register">Add User</a></li>
+                            				<li><a href="admin/remove-user">Remove User</a></li>
                             			</ul>
                     			    </li>
                 		    	</ul>';
     				}
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
-                				    <li><a href="logout.php" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="index.php#home">Home</a></li>
-                					<li><a href="inventory.php">Inventory</a></li>
-                					<li class="has-dropdown"><a href="#">Other</a>
-                        				<ul class="dropdown">
-                        					<li><a href="none.php">Misc</a></li>
-                        				</ul>
-                				    </li>
+                				    <li><a href="logout" style="color: darkgrey;">Logout</a></li>
+                				    <li><a href="index#home">Home</a></li>
+                					<li><a href="inventory">Inventory</a></li>
                 				</ul>';
     				}
     				else{
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
-                				    <li><a href="login.php">Login</a></li>
-                				    <li><a href="index.php#home">Home</a></li>
-                					<li class="has-dropdown"><a href="#">Other</a>
-                        				<ul class="dropdown">
-                        					<li><a href="none.php">Misc</a></li>
-                        				</ul>
-                				    </li>
+                				    <li><a href="login">Login</a></li>
+                				    <li><a href="index#home">Home</a></li>
                 				</ul>';
     				}
 					?>
