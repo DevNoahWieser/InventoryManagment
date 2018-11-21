@@ -35,7 +35,7 @@
 	    include("../required_items/config.php");
 	    session_start();
 	    
-	    if(!isset($_SESSION['username'])){
+	    if(!isset($_SESSION['username']) && $_SESSION['clearance'] != 'admin'){
 	        header("Location: ../login");
 	    }
 	
@@ -62,7 +62,7 @@
 				
 					<!-- Logo -->
 					<div class="navbar-brand">
-						<a href="index.php">
+						<a href="../index.php">
 							<img class="logo" src="../img/logo.png" alt="logo">
 							<img class="logo-alt" src="../img/logo-alt.png" alt="logo">
 						</a>
@@ -83,6 +83,7 @@
                     				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="../index#home">Home</a></li>
                     				<li><a href="../inventory">Inventory</a></li>
+                    				<li><a href="../customers">Customers</a></li>
                     				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="new-register">Add User</a></li>
@@ -96,6 +97,7 @@
                 				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                 				    <li><a href="../index#home">Home</a></li>
                 					<li><a href="../inventory">Inventory</a></li>
+                					<li><a href="../customers">Customers</a></li>
                 				</ul>';
     				}
     				else{
@@ -119,7 +121,6 @@
 					<div class="col-md-10 col-md-offset-1">
 						<div class="home-content">
 							<?php
-								$stmt = $conn->query("SELECT username FROM employees WHERE username='".strtolower($user)."'");
 								if($user=="" && $pass1=="" && $pass2==""){
 								    echo(
 									'<h1 class="white-text">Register Employee</h1>
@@ -136,7 +137,7 @@
 									);
 									$failed_form= true;
 								}
-								else if($stmt->num_rows > 0){
+								else if(getRows($user,$conn) > 0){
 									echo(
 									'<h1 class="white-text">Username Already Used - Try Again</h1>
 									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
@@ -178,16 +179,9 @@
 				#section1 {
 					display: none;
 				}
-			</style>'
-			);
-			$sql = "INSERT INTO employees (clearance,username,password)
-					VALUES ('$clearance','$user','$pass1')";
-					
-			if($conn->query($sql) === true){
-				echo 'You have been Registered!';
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
+			</style>');
+			$hashpass = password_hash($pass1,PASSWORD_BCRYPT);
+			$sql = addEmployee($clearance,$user,$hashpass,$conn);
 		}
 	?>
 	

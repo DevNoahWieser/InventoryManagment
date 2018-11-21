@@ -35,7 +35,7 @@
 	    include("../required_items/config.php");
 	    session_start();
 	    
-	    if(!isset($_SESSION['username'])){
+	    if(!isset($_SESSION['username']) && $_SESSION['clearance'] != 'admin'){
 	        header("Location: ../login");
 	    }
 	
@@ -62,7 +62,7 @@
 				
 					<!-- Logo -->
 					<div class="navbar-brand">
-						<a href="index.php">
+						<a href="../index.php">
 							<img class="logo" src="../img/logo.png" alt="logo">
 							<img class="logo-alt" src="../img/logo-alt.png" alt="logo">
 						</a>
@@ -83,6 +83,7 @@
                     				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="../index#home">Home</a></li>
                     				<li><a href="../inventory">Inventory</a></li>
+                    				<li><a href="../customers">Customers</a></li>
                     				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="new-register">Add User</a></li>
@@ -96,6 +97,7 @@
                 				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                 				    <li><a href="../index#home">Home</a></li>
                 					<li><a href="../inventory">Inventory</a></li>
+                					<li><a href="../customers">Customers</a></li>
                 				</ul>';
     				}
     				else{
@@ -122,8 +124,8 @@
 								$stmt = $conn->query("SELECT username FROM employees WHERE username='".strtolower($user)."'");
 								if($user=="" && $pass1=="" && $pass2==""){
 								    echo(
-									'<h1 class="white-text">Register Employee</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
+									'<h1 class="white-text">Remove Employee</h1>
+									<p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
 									</p>'
 									);
 									$failed_form= true;
@@ -131,22 +133,22 @@
 								else if($user=="" || $pass1=="" || $pass2==""){
 								    echo(
 									'<h1 class="white-text">Missing Field - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
+									<p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
 									</p>'
 									);
 									$failed_form= true;
 								}
 								else if($stmt->num_rows > 0){
 									echo(
-									'<h1 class="white-text">Username Already Used - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
+									'<h1 class="white-text">No Employee Found - Try Again</h1>
+									<p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
 									</p>'
 									);
 									$failed_form= true;
 								}
 								else if($pass1 != $pass2){
 									echo(
-									'<h1 class="white-text">Passwords Don\'t Match - Try Again</h1>
+									'<h1 class="white-text">Something went wrong - Try Again</h1>
 									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
 									</p>'
 									);
@@ -154,7 +156,7 @@
 								}
 								else{
 									echo(
-									'<h1 class="white-text">Welcome, '.$user.'</h1>
+									'<h1 class="white-text">Removed '.$user.'</h1>
 									<a href="../index.php#home"><button>Return to Home</button></a>'
 									);
 								}

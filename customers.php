@@ -50,25 +50,25 @@
 	    }
 	    
 	    $failed_form = false;
-	    $productid = htmlspecialchars($_POST['productid']);
-	    $productname = htmlspecialchars($_POST['productname']);
-	    $description = htmlspecialchars($_POST['description']);
-	    $quantity = htmlspecialchars($_POST['quantity']);
-	    $price = htmlspecialchars($_POST['price']);
+	    $custid = htmlspecialchars($_POST['custid']);
+	    $firstname = htmlspecialchars($_POST['firstname']);
+	    $lastname = htmlspecialchars($_POST['lastname']);
+	    $phone = htmlspecialchars($_POST['phone']);
+	    $email = htmlspecialchars($_POST['email']);
 	    $option = $_POST['optionbtn'];
 	    
-	    if($productid == "Add"){
-	        addInventory($productname,$description,$quantity,$price,$conn);
+	    if($custid == "Add"){
+	        addCustomer($firstname,$lastname,$phone,$email,$conn);
 	        $failed_form = true;
 	    }
 	    
 	    if($option == "Remove"){
-	        removeInventory($productid,$productname,$conn);
+	        removeCustomer($custid,$firstname,$lastname,$conn);
 	        $failed_form = true;
 	    }
 	    
 	    if(!$failed_form){
-			updateInventory($productid,$productname,$description,$quantity,$price,$conn);
+			updateCustomer($custid,$firstname,$lastname,$phone,$email,$conn);
 		}
 	?>
 	<!-- Header -->
@@ -151,7 +151,7 @@
 
 					<!-- Section header -->
 					<div class="section-header text-center">
-						<h2 class="title">Inventory Stats</h2>
+						<h2 class="title">Customer Info</h2>
 					</div>
 					<!-- /Section header -->
 
@@ -159,7 +159,7 @@
 					<div id="registered-showcase" style="text-align: center;">	
 					<?php
     					$dbc = new DatabaseCommands;
-    					$result = $dbc->callDB("inventory",$conn);
+    					$result = $dbc->callDB("customers",$conn);
     					
     					// Create Table
             	        if ($result->num_rows > 0) {
@@ -174,24 +174,24 @@
                             if($_SESSION['clearance'] == "admin"){
                                 echo '
                                 <tr style="text-align: center;">
-                                    <form method="post" action="inventory">
+                                    <form method="post" action="customers">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input type="text" value="Add" name="productid" readonly/>
+                                        <input type="text" value="Add" name="custid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="30" type="text" name="productname"/>
+                                        <input size="30" type="text" name="firstname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" name="description"/>
+                                        <input size="45" type="text" name="lastname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="5" type="text" name="quantity"/>
+                                        <input size="5" type="text" name="phone"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="8" type="text" name="price"/>
+                                        <input size="8" type="text" name="email"/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
-                                        <input class="btn" type="submit" value ="Add Item"></input>
+                                        <input class="btn" type="submit" value ="Add Cust."></input>
                                         </td>
                                     </form>
                                 </tr>';
@@ -199,11 +199,11 @@
                             
                             echo '
                             <tr style="text-align: center;border: solid black 2px;">
-                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Product ID</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Product Name</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Description</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Quantity</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Price</th>
+                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Cust. ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">First Name</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Last Name</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Phone</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Email</th>
                             <td style="padding: 5px"></td>
                             </tr>
                             ';
@@ -212,21 +212,21 @@
                             while($row = $result->fetch_assoc()) {
                                 echo '
                                 <tr style="text-align: center;border: solid black 2px;">
-                                    <form method="post" action="inventory">
+                                    <form method="post" action="customers">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                         <input size="3" type="text" value="'.$row["product_id"].'" name="productid" readonly/>
+                                         <input size="3" type="text" value="'.$row["cust_id"].'" name="custid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="30" type="text" value="'.$row["product_name"].'" name="productname"/>
+                                        <input size="10" type="text" value="'.$row["first_name"].'" name="firstname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" value="'.$row["description"].'" name="description"/>
+                                        <input size="10" type="text" value="'.$row["last_name"].'" name="lastname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="5" type="text" value="'.$row["quantity"].'" name="quantity"/>
+                                        <input size="30" type="text" value="'.$row["phone"].'" name="phone"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="8" type="text" value="'.$row["price"].'" name="price"/>
+                                        <input size="45" type="text" value="'.$row["email"].'" name="email"/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
                                         <input class="btn" type="submit" value ="Update" name="optionbtn"></input>

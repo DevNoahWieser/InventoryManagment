@@ -35,7 +35,7 @@
 	    include("../required_items/config.php");
 	    session_start();
 	    
-	    if(!isset($_SESSION['username'])){
+	    if(!isset($_SESSION['username']) && $_SESSION['clearance'] != 'admin'){
 	        header("Location: ../login");
 	    }
 	?>
@@ -55,7 +55,7 @@
 				
 					<!-- Logo -->
 					<div class="navbar-brand">
-						<a href="index.php">
+						<a href="../index.php">
 							<img class="logo" src="../img/logo.png" alt="logo">
 							<img class="logo-alt" src="../img/logo-alt.png" alt="logo">
 						</a>
@@ -76,6 +76,7 @@
                     				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="../index#home">Home</a></li>
                     				<li><a href="../inventory">Inventory</a></li>
+                    				<li><a href="../customers">Customers</a></li>
                     				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="new-register">Add User</a></li>
@@ -89,6 +90,7 @@
                 				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                 				    <li><a href="../index#home">Home</a></li>
                 					<li><a href="../inventory">Inventory</a></li>
+                					<li><a href="../customers">Customers</a></li>
                 				</ul>';
     				}
     				else{
@@ -103,33 +105,33 @@
 			</div>
 		</nav>
 		<!-- /Nav -->
+		
+		<!-- SECTION 1 -->
+    	<div id="section1" class="section md-padding">
+    
+    		<!-- Container -->
+    		<div class="container">
+    
+    			<!-- Row -->
+    			<div class="row">
+    
+    			    <!-- Section 1 -->
+    			    <h2 style="color: white;">Admin cPanel</h2>
+    			    <a href="new-register.php">Add a User</p>
+    			    <a href="remove-user.php">Remove a User</p>
+    				<!-- /Section 1 -->
+    
+    		    </div>
+    			<!-- /Row -->
+    
+    		</div>
+    		<!-- /Container -->
+    
+    	</div>
+    	<!-- /SECTION 1 -->
 
 	</header>
 	<!-- /Header -->
-	
-	<!-- SECTION 1 -->
-	<div id="section1" class="section md-padding">
-
-		<!-- Container -->
-		<div class="container">
-
-			<!-- Row -->
-			<div class="row">
-
-			    <!-- Section 1 -->
-			    <p>Test</p>
-			    <p>Test</p>
-			    <p>Test</p>
-				<!-- /Section 1 -->
-
-		</div>
-			<!-- /Row -->
-
-		</div>
-		<!-- /Container -->
-
-	</div>
-	<!-- /SECTION 1 -->
 
 	<!-- Footer -->
 	<footer id="footer" class="sm-padding bg-dark">

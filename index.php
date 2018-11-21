@@ -61,7 +61,7 @@
 				
 					<!-- Logo -->
 					<div class="navbar-brand">
-						<a href="index.php">
+						<a href="index">
 							<img class="logo" src="img/logo.png" alt="logo">
 							<img class="logo-alt" src="img/logo-alt.png" alt="logo">
 						</a>
@@ -82,6 +82,7 @@
                     				<li><a href="logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="index#home">Home</a></li>
                     				<li><a href="inventory">Inventory</a></li>
+                    				<li><a href="customers">Customers</a></li>
                     				<li class="has-dropdown"><a href="admin/cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="admin/new-register">Add User</a></li>
@@ -95,6 +96,7 @@
                 				    <li><a href="logout" style="color: darkgrey;">Logout</a></li>
                 				    <li><a href="index#home">Home</a></li>
                 					<li><a href="inventory">Inventory</a></li>
+                					<li><a href="customers">Customers</a></li>
                 				</ul>';
     				}
     				else{
@@ -176,32 +178,6 @@
                         echo '<h3>Please login to view</h3>';
                     }
                 ?>
-					<?php
-						/*$stmt = $conn->query("SELECT username FROM employees");
-						$i = 0;
-						while($row = $stmt->fetch_array(MYSQLI_ASSOC)) {
-							$current_user = $row['username'];
-							if($row['username'] != ""){
-								if($i%5 == 0){
-								    echo '<div class="row">';
-									//echo '<tr>';
-								}
-								
-								echo '<div class="col-md-2">';
-								//echo '<th style="text-align: center;">';
-								echo $row['username'];
-								//echo '</th>';
-								echo '</div>';
-								
-								if($i%5 == 4){
-									//echo '</tr>';
-									echo '</div>';
-									//echo '<tr style="height: 25px;"></tr>';
-								}
-								$i++;
-							}
-						}
-					*/?>
 				</div>
 				<!-- /Section 1 -->
 				

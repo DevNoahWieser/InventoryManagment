@@ -40,8 +40,9 @@
 		$pass1 = $_POST['login-password'];
 		$failed_form = false;
 		
-		$stmt = $conn->query("SELECT clearance,username,password FROM employees WHERE username='".$user."' AND password='".$pass1."'");
-		$row = $stmt->fetch_array(MYSQLI_ASSOC);
+		if($user != ""){
+    		$row = getUserInfo($user,$conn);
+		}
 	?>
 	
 	<!-- Header -->
@@ -59,7 +60,7 @@
 				<div class="navbar-header">
 					<!-- Logo -->
 					<div class="navbar-brand">
-						<a href="index.php">
+						<a href="index">
 							<img class="logo" src="img/logo.png" alt="logo">
 							<img class="logo-alt" src="img/logo-alt.png" alt="logo">
 						</a>
@@ -77,7 +78,6 @@
 				<ul class="main-nav nav navbar-nav navbar-right">
 				<li><a href="login.php">Login</a></li>
 				    <li><a href="index.php#home">Home</a></li>
-					<!--<li><a href="inventory.php">Inventory</a></li>-->
 					<li class="has-dropdown"><a href="#">Other</a>
         				<ul class="dropdown">
         					<li><a href="none.php">Misc</a></li>
@@ -99,10 +99,10 @@
 					<div class="col-md-10 col-md-offset-1">
 						<div class="home-content">
 							<?php
-							if(strtolower($user) == strtolower($row['username']) && $pass1 == $row['password'] && isset($user) && isset($pass1)){
+							if(strtolower($user) == strtolower($row['username']) && password_verify($pass1,$row['password']) && isset($user) && isset($pass1)){
 							    $_SESSION['username'] = $user;
 							    $_SESSION['clearance'] = $row['clearance'];
-							    header("Location: index.php");
+							    header("Location: /");
 							}
 							else{
 							    if(isset($user) && isset($pass1)){
