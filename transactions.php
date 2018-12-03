@@ -50,25 +50,17 @@
 	    }
 	    
 	    $failed_form = false;
-	    $custid = htmlspecialchars($_POST['custid']);
-	    $firstname = htmlspecialchars($_POST['firstname']);
-	    $lastname = htmlspecialchars($_POST['lastname']);
-	    $phone = htmlspecialchars($_POST['phone']);
-	    $email = htmlspecialchars($_POST['email']);
-	    $option = $_POST['optionbtn'];
+	    $trans_id = htmlspecialchars($_POST['trans_id']);
+	    $cust_id = htmlspecialchars($_POST['cust_id']);
+	    $date_paid = htmlspecialchars($_POST['date_paid']);
 	    
-	    if($custid == "Add"){
-	        addCustomer($firstname,$lastname,$phone,$email,$conn);
-	        $failed_form = true;
-	    }
-	    
-	    if($option == "Remove"){
-	        removeCustomer($custid,$firstname,$lastname,$conn);
+	    if($trans_id == "Add"){
+	        addTransaction($cust_id,$date_paid,$conn);
 	        $failed_form = true;
 	    }
 	    
 	    if(!$failed_form){
-			updateCustomer($custid,$firstname,$lastname,$phone,$email,$conn);
+			updateTransaction($trans_id,$date_paid,$conn);
 		}
 	?>
 	<!-- Header -->
@@ -155,7 +147,7 @@
 
 					<!-- Section header -->
 					<div class="section-header text-center">
-						<h2 class="title">Customer Info</h2>
+						<h2 class="title">Transactions</h2>
 					</div>
 					<!-- /Section header -->
 
@@ -163,7 +155,7 @@
 					<div id="registered-showcase" style="text-align: center;">	
 					<?php
     					$dbc = new DatabaseCommands;
-    					$result = $dbc->callDB("customers",$conn);
+    					$result = $dbc->callDB("transactions",$conn);
     					
     					// Create Table
             	        if ($result->num_rows > 0) {
@@ -178,24 +170,18 @@
                             if($_SESSION['clearance'] == "admin"){
                                 echo '
                                 <tr style="text-align: center;">
-                                    <form method="post" action="customers">
+                                    <form method="post" action="transactions">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input type="text" value="Add" name="custid" readonly/>
+                                        <input type="text" value="Add" name="trans_id" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="30" type="text" name="firstname"/>
+                                        <input size="30" type="text" name="cust_id"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" name="lastname"/>
-                                        </td>
-                                        <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="5" type="text" name="phone"/>
-                                        </td>
-                                        <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="8" type="text" name="email"/>
+                                        <input size="45" type="text" name="date_paid"/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
-                                        <input class="btn" type="submit" value ="Add Cust."></input>
+                                        <input class="btn" type="submit" value ="Add Trans."></input>
                                         </td>
                                     </form>
                                 </tr>';
@@ -203,12 +189,9 @@
                             
                             echo '
                             <tr style="text-align: center;border: solid black 2px;">
-                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Cust. ID</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">First Name</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Last Name</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Phone</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Email</th>
-                            <td style="padding: 5px"></td>
+                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Transaction ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Customer ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Date Paid</th>
                             </tr>
                             ';
                             
@@ -216,32 +199,19 @@
                             while($row = $result->fetch_assoc()) {
                                 echo '
                                 <tr style="text-align: center;border: solid black 2px;">
-                                    <form method="post" action="customers">
+                                    <form method="post" action="transactions">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                         <input size="3" type="text" value="'.$row["cust_id"].'" name="custid" readonly/>
+                                         <input size="3" type="text" value="'.$row["trans_id"].'" name="trans_id" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="10" type="text" value="'.$row["first_name"].'" name="firstname"/>
+                                        <input size="30" type="text" value="'.$row["cust_id"].'" name="cust_id" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="10" type="text" value="'.$row["last_name"].'" name="lastname"/>
-                                        </td>
-                                        <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="30" type="text" value="'.$row["phone"].'" name="phone"/>
-                                        </td>
-                                        <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" value="'.$row["email"].'" name="email"/>
+                                        <input size="45" type="text" value="'.$row["date_paid"].'" name="date_paid"/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
                                         <input class="btn" type="submit" value ="Update" name="optionbtn"></input>
                                         </td>';
-                                        if($_SESSION['clearance'] == "admin"){
-                                            echo '
-                                            <td style="padding: 5px;border: solid black 2px;">
-                                                <input class="btn" type="submit" value ="Remove" name="optionbtn"></input>
-                                            </td>
-                                            ';
-                                        }
                                     echo '
                                     </form>
                                 </tr>';

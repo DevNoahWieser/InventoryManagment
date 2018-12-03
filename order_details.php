@@ -50,25 +50,25 @@
 	    }
 	    
 	    $failed_form = false;
-	    $custid = htmlspecialchars($_POST['custid']);
-	    $firstname = htmlspecialchars($_POST['firstname']);
-	    $lastname = htmlspecialchars($_POST['lastname']);
-	    $phone = htmlspecialchars($_POST['phone']);
-	    $email = htmlspecialchars($_POST['email']);
+	    $orderid = htmlspecialchars($_POST['orderid']);
+	    $productname = htmlspecialchars($_POST['productname']);
+	    $quantity = htmlspecialchars($_POST['quantity']);
+	    $price = htmlspecialchars($_POST['price']);
+
 	    $option = $_POST['optionbtn'];
 	    
-	    if($custid == "Add"){
-	        addCustomer($firstname,$lastname,$phone,$email,$conn);
+	    if($trans_id == "Add"){
+	        addOrderData($orderid,$productname,$quantity,$price,$conn);
 	        $failed_form = true;
 	    }
 	    
 	    if($option == "Remove"){
-	        removeCustomer($custid,$firstname,$lastname,$conn);
+	        removeOrderData($orderid,$productname,$quantity,$price,$conn);
 	        $failed_form = true;
 	    }
 	    
 	    if(!$failed_form){
-			updateCustomer($custid,$firstname,$lastname,$phone,$email,$conn);
+			updateOrderData($orderid,$productname,$quantity,$price,$conn);
 		}
 	?>
 	<!-- Header -->
@@ -155,7 +155,7 @@
 
 					<!-- Section header -->
 					<div class="section-header text-center">
-						<h2 class="title">Customer Info</h2>
+						<h2 class="title">Orders</h2>
 					</div>
 					<!-- /Section header -->
 
@@ -163,7 +163,7 @@
 					<div id="registered-showcase" style="text-align: center;">	
 					<?php
     					$dbc = new DatabaseCommands;
-    					$result = $dbc->callDB("customers",$conn);
+    					$result = $dbc->callDB("order_details",$conn);
     					
     					// Create Table
             	        if ($result->num_rows > 0) {
@@ -178,24 +178,21 @@
                             if($_SESSION['clearance'] == "admin"){
                                 echo '
                                 <tr style="text-align: center;">
-                                    <form method="post" action="customers">
+                                    <form method="post" action="order_details">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input type="text" value="Add" name="custid" readonly/>
+                                        <input type="text" size="35" name="orderid"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="30" type="text" name="firstname"/>
+                                        <input size="35" type="text" name="productname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" name="lastname"/>
+                                        <input size="15" type="text" name="quantity"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="5" type="text" name="phone"/>
-                                        </td>
-                                        <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="8" type="text" name="email"/>
+                                        <input size="50" type="text" name="price"/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
-                                        <input class="btn" type="submit" value ="Add Cust."></input>
+                                        <input class="btn" type="submit" value ="Add To Order"></input>
                                         </td>
                                     </form>
                                 </tr>';
@@ -203,11 +200,11 @@
                             
                             echo '
                             <tr style="text-align: center;border: solid black 2px;">
-                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Cust. ID</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">First Name</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Last Name</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Phone</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Email</th>
+                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Order ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Product Name</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Quantity</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Price</th>
+
                             <td style="padding: 5px"></td>
                             </tr>
                             ';
@@ -216,24 +213,21 @@
                             while($row = $result->fetch_assoc()) {
                                 echo '
                                 <tr style="text-align: center;border: solid black 2px;">
-                                    <form method="post" action="customers">
+                                    <form method="post" action="order_details">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                         <input size="3" type="text" value="'.$row["cust_id"].'" name="custid" readonly/>
+                                            <input size="3" type="text" value="'.$row["order_id"].'" name="orderid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="10" type="text" value="'.$row["first_name"].'" name="firstname"/>
+                                            <input size="50" type="text" value="'.$row["product_name"].'" name="productname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="10" type="text" value="'.$row["last_name"].'" name="lastname"/>
+                                            <input size="15" type="text" value="'.$row["quantity"].'" name="quantity"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="30" type="text" value="'.$row["phone"].'" name="phone"/>
-                                        </td>
-                                        <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" value="'.$row["email"].'" name="email"/>
+                                            <input size="20" type="text" value="'.$row["price"].'" name="price"/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
-                                        <input class="btn" type="submit" value ="Update" name="optionbtn"></input>
+                                            <input class="btn" type="submit" value ="Update" name="optionbtn"></input>
                                         </td>';
                                         if($_SESSION['clearance'] == "admin"){
                                             echo '

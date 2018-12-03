@@ -109,6 +109,8 @@
                     				<li><a href="index#home">Home</a></li>
                     				<li><a href="inventory">Inventory</a></li>
                     				<li><a href="customers">Customers</a></li>
+                    				<li><a href="transactions">Transactions</a></li>
+                    				<li><a href="order_details">Orders</a></li>
                     				<li class="has-dropdown"><a href="admin/cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="admin/new-register">Add User</a></li>
@@ -123,6 +125,8 @@
                 				    <li><a href="index#home">Home</a></li>
                 					<li><a href="inventory">Inventory</a></li>
                 					<li><a href="customers">Customers</a></li>
+                					<li><a href="transactions">Transactions</a></li>
+                    				<li><a href="order_details">Orders</a></li>
                 				</ul>';
     				}
     				else{
