@@ -44,6 +44,13 @@
 	<?php
 		include("required_items/config.php");
 	    session_start();
+	    $orderid = htmlspecialchars($_POST['order_id']);
+	    $status = htmlspecialchars($_POST['status']);
+	    $option = $_POST['statusbtn'];
+	    
+	    if($option == "Change Status"){
+	        updateOrderStatus($orderid, $status,$conn);
+	    }
 	?>
 	<!-- Header -->
 	<header id="home">
@@ -81,8 +88,14 @@
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
                     				<li><a href="logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="index#home">Home</a></li>
-                    				<li><a href="inventory">Inventory</a></li>
-                    				<li><a href="customers">Customers</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="inventory">Inventory</a></li>
+                    				        <li><a href="customers">Customers</a></li>
+                    				        <li><a href="transactions">Transactions</a></li>
+                    				        <li><a href="order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                     				<li class="has-dropdown"><a href="admin/cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="admin/new-register">Add User</a></li>
@@ -94,9 +107,15 @@
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
                 				    <li><a href="logout" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="index#home">Home</a></li>
-                					<li><a href="inventory">Inventory</a></li>
-                					<li><a href="customers">Customers</a></li>
+                    				<li><a href="index#home">Home</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="inventory">Inventory</a></li>
+                    				        <li><a href="customers">Customers</a></li>
+                    				        <li><a href="transactions">Transactions</a></li>
+                    				        <li><a href="order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                 				</ul>';
     				}
     				else{
@@ -172,7 +191,59 @@
 				<div id="registered-showcase" style="text-align: center;">
 				<?php
                     if(isset($_SESSION['username'])){
-				        echo '<p>Display Content Here</p>';
+				        $dbc = new DatabaseCommands;
+    					$result = $dbc->callDB("orders",$conn);
+    					
+    					// Create Table
+            	        if ($result->num_rows > 0) {
+                            echo '
+                            <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
+                            echo '
+                            <tr style="text-align: center;border: solid black 2px;">
+                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Order ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Transaction ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Customer ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Status</th>
+                            </tr>
+                            ';
+                            
+                            // Output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                if($row["status"] == "COMPLETE"){
+                                    $statuscolor = 'green';
+                                } else {
+                                    $statuscolor = 'red';
+                                }
+                                echo '
+                                <tr style="text-align: center;border: solid black 2px;">
+                                    <form method="post" action="index">
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                         <input size="3" type="text" value="'.$row["order_id"].'" readonly/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input size="30" type="text" value="'.$row["trans_id"].'" readonly/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input size="30" type="text" value="'.$row["cust_id"].'" readonly/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input size="45" type="text" value="'.$row["status"].'"
+                                        style="font-weight: bolder;color: black;background-color: '.
+                                        $statuscolor
+                                        .';" readonly/>
+                                        </td>
+                                        <td style="padding: 5px;border: solid black 2px;">
+                                        <input class="btn" type="submit" value ="Change Status" name="statusbtn"></input>
+                                        </td>';
+                                        ;
+                                    echo '
+                                    </form>
+                                </tr>';
+                            }
+                            echo '</table>';
+                        } else {
+                            echo $result;
+                        }
                     }
                     else{
                         echo '<h3>Please login to view</h3>';
