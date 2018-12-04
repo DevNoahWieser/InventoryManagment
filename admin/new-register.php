@@ -35,7 +35,7 @@
 	    include("../required_items/config.php");
 	    session_start();
 	    
-	    if(!isset($_SESSION['username']) && $_SESSION['clearance'] != 'admin'){
+	    if($_SESSION['clearance'] != 'admin'){
 	        header("Location: ../login");
 	    }
 	

@@ -170,7 +170,7 @@
                             echo '
                             <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
                             
-                            if($_SESSION['clearance'] == "admin"){
+                            if($_SESSION['clearance'] != ""){
                                 echo '
                                 <tr style="text-align: center;">
                                     <form method="post" action="transactions">

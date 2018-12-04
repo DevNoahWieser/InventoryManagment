@@ -135,7 +135,11 @@
 							if(strtolower($user) == strtolower($row['username']) && password_verify($pass1,$row['password']) && isset($user) && isset($pass1)){
 							    $_SESSION['username'] = $user;
 							    $_SESSION['clearance'] = $row['clearance'];
-							    header("Location: /");
+							    if($_SESSION['clearance'] == "admin"){
+							        header("Location: admin");
+							    } else {
+							        header("Location: /");
+							    }
 							}
 							else{
 							    if(isset($user) && isset($pass1)){
