@@ -82,8 +82,14 @@
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
                     				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="../index#home">Home</a></li>
-                    				<li><a href="../inventory">Inventory</a></li>
-                    				<li><a href="../customers">Customers</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="../inventory">Inventory</a></li>
+                    				        <li><a href="../customers">Customers</a></li>
+                    				        <li><a href="../transactions">Transactions</a></li>
+                    				        <li><a href="../order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                     				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="new-register">Add User</a></li>
@@ -95,9 +101,15 @@
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
                 				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="../index#home">Home</a></li>
-                					<li><a href="../inventory">Inventory</a></li>
-                					<li><a href="../customers">Customers</a></li>
+                    				<li><a href="../index#home">Home</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="../inventory">Inventory</a></li>
+                    				        <li><a href="../customers">Customers</a></li>
+                    				        <li><a href="../transactions">Transactions</a></li>
+                    				        <li><a href="../order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                 				</ul>';
     				}
     				else{

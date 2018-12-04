@@ -57,8 +57,8 @@
 
 	    $option = $_POST['optionbtn'];
 	    
-	    if($trans_id == "Add"){
-	        addOrderData($orderid,$productname,$quantity,$price,$conn);
+	    if($price == "Total Price"){
+	        addOrderData($orderid,$productname,$quantity,$conn);
 	        $failed_form = true;
 	    }
 	    
@@ -107,10 +107,14 @@
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
                     				<li><a href="logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="index#home">Home</a></li>
-                    				<li><a href="inventory">Inventory</a></li>
-                    				<li><a href="customers">Customers</a></li>
-                    				<li><a href="transactions">Transactions</a></li>
-                    				<li><a href="order_details">Orders</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="inventory">Inventory</a></li>
+                    				        <li><a href="customers">Customers</a></li>
+                    				        <li><a href="transactions">Transactions</a></li>
+                    				        <li><a href="order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                     				<li class="has-dropdown"><a href="admin/cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="admin/new-register">Add User</a></li>
@@ -122,11 +126,15 @@
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
                 				    <li><a href="logout" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="index#home">Home</a></li>
-                					<li><a href="inventory">Inventory</a></li>
-                					<li><a href="customers">Customers</a></li>
-                					<li><a href="transactions">Transactions</a></li>
-                    				<li><a href="order_details">Orders</a></li>
+                    				<li><a href="index#home">Home</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="inventory">Inventory</a></li>
+                    				        <li><a href="customers">Customers</a></li>
+                    				        <li><a href="transactions">Transactions</a></li>
+                    				        <li><a href="order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                 				</ul>';
     				}
     				else{
@@ -167,11 +175,6 @@
     					
     					// Create Table
             	        if ($result->num_rows > 0) {
-            	            /*
-            	                Scrollable Table
-            	                Author: Rajan V.
-            	                https://medium.com/@vembarrajan/html-css-tricks-scroll-able-table-body-tbody-d23182ae0fbc
-            	            */
                             echo '
                             <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
                             
@@ -180,19 +183,19 @@
                                 <tr style="text-align: center;">
                                     <form method="post" action="order_details">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input type="text" size="35" name="orderid"/>
+                                        <input type="text" size="35" placeholder="Order ID" name="orderid"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="35" type="text" name="productname"/>
+                                        <input size="35" type="text" placeholder="ProductID" name="productname"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="15" type="text" name="quantity"/>
+                                        <input size="15" type="text" placeholder="Quantity" name="quantity"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="50" type="text" name="price"/>
+                                        <input style="color: black;font-weight: bold;" size="50" type="text" value="Total Price" name="price" readonly/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
-                                        <input class="btn" type="submit" value ="Add To Order"></input>
+                                        <input class="btn" type="submit" value ="Add"></input>
                                         </td>
                                     </form>
                                 </tr>';
@@ -218,13 +221,13 @@
                                             <input size="3" type="text" value="'.$row["order_id"].'" name="orderid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                            <input size="50" type="text" value="'.$row["product_name"].'" name="productname"/>
+                                            <input size="50" type="text" value="'.$row["product_name"].'" name="productname" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
                                             <input size="15" type="text" value="'.$row["quantity"].'" name="quantity"/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                            <input size="20" type="text" value="'.$row["price"].'" name="price"/>
+                                            <input size="20" type="text" value="'.$row["price"].'" name="price" readonly/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
                                             <input class="btn" type="submit" value ="Update" name="optionbtn"></input>

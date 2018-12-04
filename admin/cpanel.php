@@ -75,8 +75,14 @@
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
                     				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="../index#home">Home</a></li>
-                    				<li><a href="../inventory">Inventory</a></li>
-                    				<li><a href="../customers">Customers</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="../inventory">Inventory</a></li>
+                    				        <li><a href="../customers">Customers</a></li>
+                    				        <li><a href="../transactions">Transactions</a></li>
+                    				        <li><a href="../order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                     				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="new-register">Add User</a></li>
@@ -88,9 +94,15 @@
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
                 				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="../index#home">Home</a></li>
-                					<li><a href="../inventory">Inventory</a></li>
-                					<li><a href="../customers">Customers</a></li>
+                    				<li><a href="../index#home">Home</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="../inventory">Inventory</a></li>
+                    				        <li><a href="../customers">Customers</a></li>
+                    				        <li><a href="../transactions">Transactions</a></li>
+                    				        <li><a href="../order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                 				</ul>';
     				}
     				else{
@@ -113,12 +125,14 @@
     		<div class="container">
     
     			<!-- Row -->
-    			<div class="row">
+    			<div class="row" style="margin-top: -100px;">
     
     			    <!-- Section 1 -->
-    			    <h2 style="color: white;">Admin cPanel</h2>
-    			    <a href="new-register.php">Add a User</p>
-    			    <a href="remove-user.php">Remove a User</p>
+    			    <h2 style="color: white;background-color: black;border: solid white 1px;padding: 5px;">Admin cPanel</h2>
+    			    <div style="margin-left: 10px;display-inline">
+        			    <a href="new-register.php"><button style="width: 25%;">Add a User</button></p>
+        			    <a href="remove-user.php"><button style="width: 25%;">Remove a User</button></p>
+        			</div>
     				<!-- /Section 1 -->
     
     		    </div>

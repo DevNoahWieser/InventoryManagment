@@ -38,13 +38,25 @@
 	    if(!isset($_SESSION['username']) && $_SESSION['clearance'] != 'admin'){
 	        header("Location: ../login");
 	    }
-	
-		// Collect Form Information
-		$clearance = htmlspecialchars($_POST['clearance']);
-		$user = htmlspecialchars($_POST['username']);
-		$pass1 = htmlspecialchars($_POST['password']);
-		$pass2 = htmlspecialchars($_POST['password-confirm']);
-		$failed_form = false;
+	    
+		$failed_form = true;
+	    $employid = htmlspecialchars($_POST['employid']);
+	    $user = htmlspecialchars($_POST['user']);
+	    
+	    if($employid != ""){
+	        $failed_form = false;
+	    }
+	    
+	    if(!$failed_form){
+			echo(
+			'<style>
+				#section1 {
+					display: none;
+				}
+			</style>'
+			);
+			removeEmployee($employid,$user,$conn);
+		}
 	?>
 	<!-- Header -->
 	<header id="home">
@@ -82,8 +94,14 @@
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
                     				<li><a href="../logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="../index#home">Home</a></li>
-                    				<li><a href="../inventory">Inventory</a></li>
-                    				<li><a href="../customers">Customers</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="../inventory">Inventory</a></li>
+                    				        <li><a href="../customers">Customers</a></li>
+                    				        <li><a href="../transactions">Transactions</a></li>
+                    				        <li><a href="../order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                     				<li class="has-dropdown"><a href="cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="new-register">Add User</a></li>
@@ -95,9 +113,15 @@
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
                 				    <li><a href="../logout" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="../index#home">Home</a></li>
-                					<li><a href="../inventory">Inventory</a></li>
-                					<li><a href="../customers">Customers</a></li>
+                    				<li><a href="../index#home">Home</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="../inventory">Inventory</a></li>
+                    				        <li><a href="../customers">Customers</a></li>
+                    				        <li><a href="../transactions">Transactions</a></li>
+                    				        <li><a href="../order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                 				</ul>';
     				}
     				else{
@@ -121,45 +145,18 @@
 					<div class="col-md-10 col-md-offset-1">
 						<div class="home-content">
 							<?php
-								$stmt = $conn->query("SELECT username FROM employees WHERE username='".strtolower($user)."'");
-								if($user=="" && $pass1=="" && $pass2==""){
-								    echo(
-									'<h1 class="white-text">Remove Employee</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
-									</p>'
-									);
-									$failed_form= true;
-								}
-								else if($user=="" || $pass1=="" || $pass2==""){
-								    echo(
-									'<h1 class="white-text">Missing Field - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
-									</p>'
-									);
-									$failed_form= true;
-								}
-								else if($stmt->num_rows > 0){
-									echo(
-									'<h1 class="white-text">No Employee Found - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
-									</p>'
-									);
-									$failed_form= true;
-								}
-								else if($pass1 != $pass2){
-									echo(
-									'<h1 class="white-text">Something went wrong - Try Again</h1>
-									<p class="white-text">Scroll down to reveal <a href="#section1">registration form</a>
-									</p>'
-									);
-									$failed_form = true;
-								}
-								else{
-									echo(
-									'<h1 class="white-text">Removed '.$user.'</h1>
-									<a href="../index.php#home"><button>Return to Home</button></a>'
-									);
-								}
+							if($failed_form){
+								echo '
+								    <h1 class="white-text">Remove Employee</h1>
+								    <p class="white-text">Scroll down to reveal <a href="#section1">Removal form</a>
+								    </p>'
+								;
+							} else {
+							    echo '
+								    <h1 class="white-text">Removed '.$user.'</h1>
+								    <a href="../index.php#home"><button>Return to Home</button></a>
+								    ';
+							}
 							?>
 						</div>
 					</div>
@@ -173,72 +170,70 @@
 	</header>
 	<!-- /Header -->
 	
-	<?php
-		if(!$failed_form){
-			echo(
-			'<style>
-				#section1 {
-					display: none;
-				}
-			</style>'
-			);
-			$sql = "INSERT INTO employees (clearance,username,password)
-					VALUES ('$clearance','$user','$pass1')";
-					
-			if($conn->query($sql) === true){
-				echo 'You have been Registered!';
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-		}
-	?>
-	
-	<!-- SECTION 1 -->
-	<div id="section1" class="section md-padding">
+	<!-- SECTION 2 -->
+		<div id="section1" class="section md-padding">
+			
+			<!-- Container -->
+			<div class="container" style="background-color: white;">
 
-		<!-- Container -->
-		<div class="container">
+				<!-- Row -->
+				<div class="row">
 
-			<!-- Row -->
-			<div class="row">
+					<!-- Section header -->
+					<div class="section-header text-center">
+						<h2 class="title">Transactions</h2>
+					</div>
+					<!-- /Section header -->
 
-			    <!-- Section 1 -->
-			    <div id="register-form" class="col-md-5">
-				    <form class="form-register" method="post" action="new-register.php">
-				        <label>Clearance</label>
-					    <div class="form__group">
-						    <input type="radio" name="clearance" value="employee">Employee<br/>
-						    <input type="radio" name="clearance" value="admin">Manager/Admin
-					    </div>
-						
-						<br/>
-						<label>Login Information</label>
-					    <div class="form__group">
-						    <input type="text" placeholder="Username" class="form__input" name="username"/>
-					    </div>
-						
-			    		<div class="form__group">
-				    		<input type="password" placeholder="Password" class="form__input" name="password"/>
-					    </div>
-						
-				    	<div class="form__group">
-					    	<input type="password" placeholder="Confirm Password" class="form__input" name="password-confirm"/>
-					    </div>
-						
-					    <input class="btn" type="submit" value ="Register"></input>
-						
-			    	</form>
-			    </div>
-				<!-- /Section 1 -->
+					<!-- Section 2 -->
+					<div id="registered-showcase" style="text-align: center;">	
+					<?php
+    					$dbc = new DatabaseCommands;
+    					$result = $dbc->callDB("employees",$conn);
+    					
+    					// Create Table
+            	        if ($result->num_rows > 0) {
+                            echo '
+                            <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
+                            echo '
+                            <tr style="text-align: center;border: solid black 2px;">
+                            <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Employee ID</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Username</th>
+                            </tr>
+                            ';
+                            
+                            // Output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo '
+                                <tr style="text-align: center;border: solid black 2px;">
+                                    <form method="post" action="remove-user">
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                         <input size="3" type="text" value="'.$row["employ_id"].'" name="employid" readonly/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input size="30" type="text" value="'.$row["username"].'" name="user" readonly/>
+                                        </td>
+                                        <td style="padding: 5px;border: solid black 2px;">
+                                        <input class="btn" type="submit" value="Remove"></input>
+                                        </td>';
+                                    echo '
+                                    </form>
+                                </tr>';
+                            }
+                            echo '</table>';
+                        } else {
+                            echo $result;
+                        }
+    				?>
+	                <!-- /Section 2 -->
+	                
+				</div>
+				<!-- /Row -->
+
+			</div>
 
 		</div>
-			<!-- /Row -->
-
-		</div>
-		<!-- /Container -->
-
-	</div>
-	<!-- /SECTION 1 -->
+		<!-- /SECTION 2 -->
 
 	<!-- Footer -->
 	<footer id="footer" class="sm-padding bg-dark">

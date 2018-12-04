@@ -107,10 +107,14 @@
     					echo '<ul class="main-nav nav navbar-nav navbar-right">
                     				<li><a href="logout" style="color: darkgrey;">Logout</a></li>
                     				<li><a href="index#home">Home</a></li>
-                    				<li><a href="inventory">Inventory</a></li>
-                    				<li><a href="customers">Customers</a></li>
-                    				<li><a href="transactions">Transactions</a></li>
-                    				<li><a href="order_details">Orders</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="inventory">Inventory</a></li>
+                    				        <li><a href="customers">Customers</a></li>
+                    				        <li><a href="transactions">Transactions</a></li>
+                    				        <li><a href="order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                     				<li class="has-dropdown"><a href="admin/cpanel">Admin cPanel</a>
                             			<ul class="dropdown">
                             				<li><a href="admin/new-register">Add User</a></li>
@@ -122,11 +126,15 @@
     				else if(isset($_SESSION['username']) && $_SESSION['clearance'] == "employee"){
     				    echo '<ul class="main-nav nav navbar-nav navbar-right">
                 				    <li><a href="logout" style="color: darkgrey;">Logout</a></li>
-                				    <li><a href="index#home">Home</a></li>
-                					<li><a href="inventory">Inventory</a></li>
-                					<li><a href="customers">Customers</a></li>
-                					<li><a href="transactions">Transactions</a></li>
-                    				<li><a href="order_details">Orders</a></li>
+                    				<li><a href="index#home">Home</a></li>
+                    				<li class="has-dropdown"><a href="#">Database</a>
+                            			<ul class="dropdown">
+                            				<li><a href="inventory">Inventory</a></li>
+                    				        <li><a href="customers">Customers</a></li>
+                    				        <li><a href="transactions">Transactions</a></li>
+                    				        <li><a href="order_details">Orders</a></li>
+                            			</ul>
+                    			    </li>
                 				</ul>';
     				}
     				else{
@@ -167,11 +175,6 @@
     					
     					// Create Table
             	        if ($result->num_rows > 0) {
-            	            /*
-            	                Scrollable Table
-            	                Author: Rajan V.
-            	                https://medium.com/@vembarrajan/html-css-tricks-scroll-able-table-body-tbody-d23182ae0fbc
-            	            */
                             echo '
                             <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
                             

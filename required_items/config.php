@@ -1,4 +1,7 @@
 <?php
+    // In Case of Emergency
+    // echo "Error: " . $sql . "<br>" . $conn->error;
+    
     // Setup Database Connection
 	$servername = "localhost";
 	$username = "u481159385_yvej";
@@ -39,11 +42,39 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Something went wrong!');
+			</script>
+			";
 		}
 	}
 	
 	// Function to remove Employee from Database
+	function removeEmployee($employid,$user,$conn){
+	    $sql = "DELETE FROM employees
+				WHERE employ_id = ".$employid."";
+				
+				echo "
+			    <script type='text/javascript'>
+			        alert(".$employid.$user.");
+			    </script>
+			";
+				
+		if($conn->query($sql) === true){
+			echo "
+			<script type='text/javascript'>
+			    alert(".$user."' has been removed!');
+			</script>
+			";
+		} else {
+			echo "
+			<script type='text/javascript'>
+			    alert('Something went wrong!');
+			</script>
+			";
+		}
+	}
 	
 	// --- INVENTORY ---
 	// Function to add Inventory to Database
@@ -58,7 +89,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to add customer\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	
@@ -74,7 +109,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Tried to remove item that does not exist!');
+			</script>
+			";
 		}
 	}
 	
@@ -91,7 +130,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to add customer\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	
@@ -107,25 +150,59 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Tried to remove customer that does not exist');
+			</script>
+			";
 		}
 	}
 	
 	// --- ORDER ---
 	// Function to add Order Data to Database
-	function addOrderData($orderid,$productname,$quantity,$price,$conn){
-	    $sql = "INSERT INTO order_details (order_id,product_name,quantity,price)
+	function addOrderData($orderid,$productname,$quantity,$conn){
+	    $sqlcheck = "SELECT * FROM inventory
+	                WHERE product_id = '".$productname."'";
+	            
+	    if($conn->query($sqlcheck) != false){
+	            $result = $conn->query($sqlcheck);
+	            $row = $result->fetch_assoc();
+	        
+	            $productname = $row['product_name'];
+	            $price = $row['price'] * $quantity;
+	            
+	            $sql = "INSERT INTO order_details (order_id,product_name,quantity,price)
 				VALUES ('$orderid','$productname','$quantity','$price')";
 				
-		if($conn->query($sql) === true){
-			echo "
+				echo "
+        			<script type='text/javascript'>
+        			    alert(
+        			    $orderid.$productname.$quantity.$price
+        			    );
+        			</script>
+        			";
+				
+        		if($conn->query($sql) === true){
+        			echo "
+        			<script type='text/javascript'>
+        			    alert('Order has been registered!');
+        			</script>
+        			";
+        		} else {
+        			echo "Error: " . $sql . "<br>" . $conn->error;
+        		}
+	   } else {
+	       echo "
+		   <script type='text/javascript'>
+		       alert('Product doesn't exist\nCheck your Product ID, then try again.');
+		   </script>
+		   ";
+	   }
+	  echo "
 			<script type='text/javascript'>
-			    alert('Order has been registered!');
+			    alert('Something went wrong!');
 			</script>
 			";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
-		}
 	}
 	// Function to remove Order Data from Database
 	function removeOrderData($orderid,$productname,$quantity,$price,$conn){
@@ -142,7 +219,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Tried to remove order data that doesn't exist);
+			</script>
+			";
 		}
 	}
 	
@@ -159,7 +240,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to add Transaction\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	
@@ -175,7 +260,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Tried to remove transaction that does not exist');
+			</script>
+			";
 		}
 	}
 	
@@ -203,7 +292,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to update\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	
@@ -226,7 +319,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to update\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	
@@ -246,7 +343,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to update\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	
@@ -268,7 +369,11 @@
 			</script>
 			";
 		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+			echo "
+			<script type='text/javascript'>
+			    alert('Failed to update\nPlease check your inputs!');
+			</script>
+			";
 		}
 	}
 	    
