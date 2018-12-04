@@ -174,8 +174,7 @@
     					$result = $dbc->callDB("order_details",$conn);
     					
     					// Create Table
-            	        if ($result->num_rows > 0) {
-                            echo '
+    					echo '
                             <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
                             
                             if($_SESSION['clearance'] == "admin"){
@@ -244,9 +243,6 @@
                                 </tr>';
                             }
                             echo '</table>';
-                        } else {
-                            echo $result;
-                        }
     				?>
 	                <!-- /Section 2 -->
 	                

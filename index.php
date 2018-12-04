@@ -44,6 +44,18 @@
 	<?php
 		include("required_items/config.php");
 	    session_start();
+	    $orderid = htmlspecialchars($_POST['orderid']);
+	    $status = htmlspecialchars($_POST['status']);
+	    $option = $_POST['statusbtn'];
+	    
+	    if($option == "Change Status"){
+	        echo "
+			<script type='text/javascript'>
+			    alert(".$status.");
+			</script>
+			";
+	        updateOrderStatus($orderid, $status,$conn);
+	    }
 	?>
 	<!-- Header -->
 	<header id="home">
@@ -209,9 +221,9 @@
                                 }
                                 echo '
                                 <tr style="text-align: center;border: solid black 2px;">
-                                    <form method="post" action="transactions">
+                                    <form method="post" action="index#section1">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                         <input size="3" type="text" value="'.$row["order_id"].'" readonly/>
+                                         <input size="3" type="text" value="'.$row["order_id"].'" name="orderid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
                                         <input size="30" type="text" value="'.$row["trans_id"].'" readonly/>
@@ -220,11 +232,15 @@
                                         <input size="30" type="text" value="'.$row["cust_id"].'" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input size="45" type="text" value="'.$row["status"].'"
+                                        <input size="45" type="text" value="'.$row["status"].'" name="status"
                                         style="font-weight: bolder;color: black;background-color: '.
                                         $statuscolor
                                         .';" readonly/>
+                                        </td>
+                                        <td style="padding: 5px;border: solid black 2px;">
+                                        <input class="btn" type="submit" value ="Change Status" name="statusbtn"></input>
                                         </td>';
+                                        ;
                                     echo '
                                     </form>
                                 </tr>';

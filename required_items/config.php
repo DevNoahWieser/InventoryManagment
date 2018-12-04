@@ -162,35 +162,57 @@
 	// Function to add Order Data to Database
 	function addOrderData($orderid,$productname,$quantity,$conn){
 	    $sqlcheck = "SELECT * FROM inventory
-	                WHERE product_id = '".$productname."'";
-	            
+	                WHERE product_id = '".$productname."'"; // Product name is still productID
+	                
 	    if($conn->query($sqlcheck) != false){
 	            $result = $conn->query($sqlcheck);
 	            $row = $result->fetch_assoc();
 	        
-	            $productname = $row['product_name'];
+	            $productname = $row['product_name']; // ProductID is now Product Name
 	            $price = $row['price'] * $quantity;
+            			
+            	// Get item quantity
+            	$stockquantitysql = 'SELECT quantity FROM inventory WHERE product_name = "'.$productname.'"';
+            	$stockquantityresult = $conn->query($stockquantitysql);
+            	$stockquantity = $stockquantityresult->fetch_assoc();
 	            
-	            $sql = "INSERT INTO order_details (order_id,product_name,quantity,price)
-				VALUES ('$orderid','$productname','$quantity','$price')";
-				
-				echo "
-        			<script type='text/javascript'>
-        			    alert(
-        			    $orderid.$productname.$quantity.$price
-        			    );
-        			</script>
-        			";
-				
-        		if($conn->query($sql) === true){
-        			echo "
-        			<script type='text/javascript'>
-        			    alert('Order has been registered!');
-        			</script>
-        			";
-        		} else {
-        			echo "Error: " . $sql . "<br>" . $conn->error;
-        		}
+	            // Remove stock quantity
+	            $quantitypass = true;
+	            $newquantity = $stockquantity['quantity'] - $quantity;
+	            
+	            if($newquantity < 0){ // Reset and fail order if stock runs out
+	                $newquantity = $stockquantity['quantity'];
+	                $quantitypass = false;
+	            }
+	            
+	            $updatestock = 'UPDATE inventory
+	                            SET quantity = "'.$newquantity.'"
+	                            WHERE product_name = "'.$productname.'"';
+	            
+	            if($conn->query($updatestock) === true && $quantitypass){
+    	            $sql = "INSERT INTO order_details (order_id,product_name,quantity,price)
+    				VALUES ('$orderid','$productname','$quantity','$price')";
+    				
+            		if($conn->query($sql) === true){
+            			echo "
+            			<script type='text/javascript'>
+            			    alert('Order has been registered!');
+            			</script>
+            			";
+            		} else {
+            		    echo "
+            			<script type='text/javascript'>
+            			    alert('Failed to add order\nPlease check your inputs!');
+            			</script>
+            			";
+            		}
+	            } else {
+	                echo '
+            			<script type="text/javascript">
+            			    alert("Failed to add order\nNot enough Stock!");
+            			</script>
+            			';
+	            }
 	   } else {
 	       echo "
 		   <script type='text/javascript'>
@@ -198,12 +220,8 @@
 		   </script>
 		   ";
 	   }
-	  echo "
-			<script type='text/javascript'>
-			    alert('Something went wrong!');
-			</script>
-			";
 	}
+	
 	// Function to remove Order Data from Database
 	function removeOrderData($orderid,$productname,$quantity,$price,$conn){
 	    $sql = "DELETE FROM order_details
@@ -376,7 +394,22 @@
 			";
 		}
 	}
+	function updateOrderStatus($orderid,$status,$conn){
+	    if($status == "COMPLETE"){
+	        $status = "INCOMPLETE";
+	    }
+	    else{
+	        $status = "COMPLETE";
+	    }
 	    
+	    $sql = 'UPDATE orders SET
+	    status = "'.$status.'"
+	    WHERE order_id = "'.$orderid.'"';
+				
+		if($conn->query($sql) === true){
+		    //Do Nothing
+		}
+	}    
 	class DatabaseCommands{
 	    function callDB($call,$conn){
 	        $sql = "SELECT * FROM ".$call;
