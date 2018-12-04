@@ -176,11 +176,20 @@
             	$stockquantityresult = $conn->query($stockquantitysql);
             	$stockquantity = $stockquantityresult->fetch_assoc();
 	            
-	            // Remove stock quantity
-	            $quantitypass = true;
-	            $newquantity = $stockquantity['quantity'] - $quantity;
+	            // Remove stock quantity if orderid is valid
+	            $quantitypass = false;
+	            $orderverify = "SELECT order_id FROM orders
+	                            WHERE order_id = '".$orderid."'";
+	            $orderverify2 = $conn->query($orderverify);
+	            $orderverify3 = $orderverify2->fetch_assoc();
 	            
-	            if($newquantity < 0){ // Reset and fail order if stock runs out
+	            if($orderverify3['order_id'] == $orderid){
+	                $quantitypass = true;
+	                $newquantity = $stockquantity['quantity'] - $quantity;
+	            }
+	            
+	            // Reset and fail order if stock runs out
+	            if($newquantity < 0 || $orderverify3['order_id'] != $orderid){
 	                $newquantity = $stockquantity['quantity'];
 	                $quantitypass = false;
 	            }
@@ -209,7 +218,7 @@
 	            } else {
 	                echo '
             			<script type="text/javascript">
-            			    alert("Failed to add order\nNot enough Stock!");
+            			    alert("Failed to add order\nNot enough Stock or Invalid OrderID!");
             			</script>
             			';
 	            }
