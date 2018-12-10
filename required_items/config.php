@@ -327,6 +327,7 @@
 		}
 	}
 	
+	// Updates customer
 	function updateCustomer($custid,$firstname,$lastname,$phone,$email,$conn){
 	    if($custid == ""){
 	        return null;
@@ -354,6 +355,7 @@
 		}
 	}
 	
+	// Updates transactions
 	function updateTransaction($transid,$datepaid,$conn){
 	    if($transid == ""){
 	        return null;
@@ -378,6 +380,7 @@
 		}
 	}
 	
+	// Updates order_details
 	function updateOrderData($orderid,$productname,$quantity,$price,$conn){
 	    if($orderid == ""){
 	        return null;
@@ -403,6 +406,8 @@
 			";
 		}
 	}
+	
+	// Updates order status in orders
 	function updateOrderStatus($orderid,$status,$conn){
 	    if($status == "COMPLETE"){
 	        $status = "INCOMPLETE";
@@ -418,10 +423,35 @@
 		if($conn->query($sql) === true){
 		    //Do Nothing
 		}
-	}    
+	}
+	
+	/*
+	    Separate commands for calling tables
+	*/
 	class DatabaseCommands{
+	    // Call a certain table
 	    function callDB($call,$conn){
 	        $sql = "SELECT * FROM ".$call;
+	        $result = $conn->query($sql);
+	        
+	        return $result;
+	    }
+	    
+	    // Call a table where orderID is...
+	    function callDBWhere($call,$orderid,$conn){
+	        $sql = "SELECT * FROM ".$call."
+	        WHERE order_id = ".$orderid;
+	        $result = $conn->query($sql);
+	        
+	        return $result;
+	    }
+	    
+	    // Call table that summarizes customer orders
+	    function callOrderList($conn){
+	        $sql = "SELECT DISTINCT O.order_id,CONCAT(C.first_name,C.last_name) as cust_name,O.status
+	                FROM orders as O,customers as C
+	                WHERE O.cust_id = C.cust_id
+	                ORDER BY O.order_id ASC";
 	        $result = $conn->query($sql);
 	        
 	        return $result;

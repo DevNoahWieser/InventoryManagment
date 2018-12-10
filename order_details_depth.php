@@ -48,6 +48,28 @@
 	    if(!isset($_SESSION['username'])){
 	        header("Location: login");
 	    }
+	    
+	    $failed_form = false;
+	    $orderid = htmlspecialchars($_POST['orderid']);
+	    $productname = htmlspecialchars($_POST['productname']);
+	    $quantity = htmlspecialchars($_POST['quantity']);
+	    $price = htmlspecialchars($_POST['price']);
+
+	    $option = $_POST['optionbtn'];
+	    
+	    if($price == "Total Price"){
+	        addOrderData($orderid,$productname,$quantity,$conn);
+	        $failed_form = true;
+	    }
+	    
+	    if($option == "Remove"){
+	        removeOrderData($orderid,$productname,$quantity,$price,$conn);
+	        $failed_form = true;
+	    }
+	    
+	    if(!$failed_form && $productname != ""){
+			updateOrderData($orderid,$productname,$quantity,$price,$conn);
+		}
 	?>
 	<!-- Header -->
 	<header id="home_showtables">
@@ -149,17 +171,41 @@
 					<div id="registered-showcase" style="text-align: center;">	
 					<?php
     					$dbc = new DatabaseCommands;
-    					$result = $dbc->callOrderList($conn);
+    					$result = $dbc->callDBWhere("order_details",$orderid,$conn);
     					
     					// Create Table
     					echo '
                             <table class="fixed_header" style="margin: auto;border: solid black 2px;>';
                             
+                            if($_SESSION['clearance'] != ""){
+                                echo '
+                                <tr style="text-align: center;">
+                                    <form method="post" action="order_details_depth">
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input type="text" size="35" placeholder="Order ID" name="orderid"/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input size="35" type="text" placeholder="ProductID" name="productname"/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input size="15" type="text" placeholder="Quantity" name="quantity"/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                        <input style="color: black;font-weight: bold;" size="50" type="text" value="Total Price" name="price" readonly/>
+                                        </td>
+                                        <td style="padding: 5px;border: solid black 2px;">
+                                        <input class="btn" type="submit" value ="Add"></input>
+                                        </td>
+                                    </form>
+                                </tr>';
+                            }
+                            
                             echo '
                             <tr style="text-align: center;border: solid black 2px;">
                             <th width="150px" style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Order ID</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Customer Name</th>
-                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Status</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Product Name</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Quantity</th>
+                            <th style="background-color: lightgrey;border: solid black 2px;padding: 5px;text-align: center;">Price</th>
 
                             <td style="padding: 5px"></td>
                             </tr>
@@ -167,11 +213,6 @@
                             
                             // Output data of each row
                             while($row = $result->fetch_assoc()) {
-                                if($row["status"] == "COMPLETE"){
-                                    $statuscolor = 'green';
-                                } else {
-                                    $statuscolor = 'red';
-                                }
                                 echo '
                                 <tr style="text-align: center;border: solid black 2px;">
                                     <form method="post" action="order_details_depth">
@@ -179,14 +220,24 @@
                                             <input size="3" type="text" value="'.$row["order_id"].'" name="orderid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                            <input size="50" type="text" value="'.$row["cust_name"].'" name="custname" readonly/>
+                                            <input size="50" type="text" value="'.$row["product_name"].'" name="productname" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
-                                            <input size="50" type="text" value="'.$row["status"].'" name="status"  style="background-color:'.$statuscolor.';" readonly/>
+                                            <input size="15" type="text" value="'.$row["quantity"].'" name="quantity"/>
+                                        </td>
+                                        <td style="border: solid black 2px;padding: 5px;">
+                                            <input size="20" type="text" value="'.$row["price"].'" name="price" readonly/>
                                         </td>
                                         <td style="padding: 5px;border: solid black 2px;">
-                                            <input class="btn" type="submit" value ="View Order" name="optionbtn"></input>
+                                            <input class="btn" type="submit" value ="Update" name="optionbtn"></input>
                                         </td>';
+                                        if($_SESSION['clearance'] == "admin"){
+                                            echo '
+                                            <td style="padding: 5px;border: solid black 2px;">
+                                                <input class="btn" type="submit" value ="Remove" name="optionbtn"></input>
+                                            </td>
+                                            ';
+                                        }
                                     echo '
                                     </form>
                                 </tr>';
