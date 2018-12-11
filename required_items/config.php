@@ -1,6 +1,9 @@
 <?php
     // In Case of Emergency
     // echo "Error: " . $sql . "<br>" . $conn->error;
+	
+	// Hide small errors that don't bother functionality
+	error_reporting(0);
     
     // Setup Database Connection
 	$servername = "localhost";

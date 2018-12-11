@@ -182,7 +182,7 @@
                                 <tr style="text-align: center;">
                                     <form method="post" action="order_details_depth">
                                         <td style="border: solid black 2px;padding: 5px;">
-                                        <input type="text" size="35" placeholder="Order ID" name="orderid"/>
+                                        <input type="text" size="35" value="'.$orderid.'" name="orderid" readonly/>
                                         </td>
                                         <td style="border: solid black 2px;padding: 5px;">
                                         <input size="35" type="text" placeholder="ProductID" name="productname"/>
